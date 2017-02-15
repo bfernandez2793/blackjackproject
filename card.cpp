@@ -1,12 +1,14 @@
 #include "card.h"
 
-
 /********************************************
 Card class
 (class for a single card in a deck)
 *********************************************/
 Card::Card() {
 	//intialize a card
+	static time_t timer;
+	++timer;
+	srand(time(NULL) + timer);
 	int r = 1 + rand() % 4;
 	switch (r) {
 	case 1: suit = "CLUBS"; break;
@@ -36,7 +38,9 @@ void Card::print()
 {
 	std::cout << "Rank: " << rank << " Suit: " << suit << "\n";
 }
-
+int Card::get_rank() {
+	return rank;
+}
 
 /**********************************
 Hand Class
@@ -52,7 +56,10 @@ Hand::Hand()
 void Hand::print()
 {
 	for (size_t i = 0; i < hand.size(); ++i)
+	{
 		hand[i].print();
+		std::cout << hand[i].get_rank() << "\n";
+	}
 	return;
 }
 void Hand::update_hand()
@@ -60,6 +67,25 @@ void Hand::update_hand()
 	Card new_card;
 	hand.push_back(new_card);
 	return;
+}
+
+int Hand::Hard_hand()
+{
+	value_of_hand = 0;
+	for (size_t i = 0; i < hand.size(); ++i)
+		if(hand[i].get_rank() == 1)
+			value_of_hand += 11;
+		else
+			value_of_hand += hand[i].get_rank();
+	return value_of_hand;
+}
+
+int Hand::Soft_hand()
+{
+	soft_val_hand = 0;
+	for (size_t i = 0; i < hand.size(); ++i)
+		soft_val_hand += hand[i].get_rank();
+	return soft_val_hand;
 }
 
 /************************
