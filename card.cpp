@@ -62,4 +62,15 @@ void Hand::update_hand()
 	return;
 }
 
+/************************
+Player Class
+(Class to handle player)
+*************************/
+Player::Player(int i) :cash(i)
+{
+}
+int& Player::get_cash() {
+	return cash;
+}
+
 

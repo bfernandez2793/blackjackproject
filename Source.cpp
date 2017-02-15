@@ -2,10 +2,9 @@
 #include "card.h"
 int main() {
 
-	Hand hand;
-	hand.print();
-	hand.update_hand();
-	hand.print();
+	
+	Player player1(100);
+	player1.print();
 
 
 	return 0;

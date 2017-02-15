@@ -23,5 +23,13 @@ private:
 	std::vector<Card> hand;
 };
 
+class Player : public Hand {
+public:
+	Player(int i = 0);
+	int& get_cash();
+private:
+	int cash;
+};
+
 
 #endif
