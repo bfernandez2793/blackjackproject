@@ -20,7 +20,7 @@ public:
 	void print();
 	void update_hand();
 private:
-	std::vector<Card> hand;
+	//std::vector<Card> hand;
 };
 
 class Player : public Hand {
