@@ -1,13 +1,17 @@
 #include "card.h"
 
-
 /********************************************
 Card class
 (class for a single card in a deck)
 *********************************************/
+
 Card::Card() {
 	//intialize a card
+	static time_t timer;
+	++timer;
+	srand(time(NULL) + timer);
 	int r = 1 + rand() % 4;
+
 	switch (r) {
 	case 1: suit = "CLUBS"; break;
 	case 2: suit = "DIAMONDS"; break;
@@ -43,24 +47,64 @@ Hand Class
 (class for handling a players hand)
 ***********************************/
 
-Hand::Hand()
+Hand::Hand(int i):theHand(nullptr),size(i)
 {
-	Card new_card;
-	hand.push_back(new_card);
+	try {
+		theHand = new Card[i];
+	}
+	catch (std::exception& e) {
+		if (theHand != nullptr)
+			delete[] theHand;
+		throw e;
+ 	}
+}
+
+Hand::Hand(const Hand& h)
+{
+	try {
+		theHand = new Card[h.size];
+		size = h.size;
+		for (size_t i = 0; i < size; ++i)
+			theHand[i] = h.theHand[i];
+	}
+	catch (std::exception& e) {
+		if (theHand != nullptr)
+			delete[] theHand;
+		throw e;
+	}
+}
+
+Hand& Hand::operator=(Hand h)
+{
+	this->swap(h);
+	return *this;
+
+}
+
+Hand::~Hand()
+{
+	delete[] theHand;
+}
+
+void Hand::swap(Hand & h)
+{
+	std::swap(theHand, h.theHand);
+	std::swap(size, h.size);
+	return;
 }
 
 void Hand::print()
 {
-	for (size_t i = 0; i < hand.size(); ++i)
-		hand[i].print();
+	for (size_t i = 0; i < size; ++i)
+		theHand[i].print();
 	return;
 }
-void Hand::update_hand()
+/*void Hand::update_hand()
 {
 	Card new_card;
 	hand.push_back(new_card);
 	return;
-}
+}*/
 
 /************************
 Player Class

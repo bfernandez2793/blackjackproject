@@ -3,9 +3,13 @@
 int main() {
 
 	
-	Player player1(100);
-	Player Dealer;
-	char answer;
+	
+	Player Dealer1;
+	Dealer1.print();
+	Player Player1;
+	Player1.print();
+
+	/*char answer;
 	std::cout << "Would you like to play a game of blackjack?";
 	std::cin >> answer;
 	player1.update_hand();
@@ -20,6 +24,6 @@ int main() {
 			Dealer.update_hand();
 	} while (answer == 'y');
 	std::cout << "Dealer's Cards: \n";
-	Dealer.print();
+	Dealer.print();*/
 	return 0;
 }

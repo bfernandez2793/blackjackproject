@@ -2,6 +2,7 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <ctime>
 #ifndef CARDS_H
 #define CARDS_H
 
@@ -14,13 +15,20 @@ private:
 	std::string suit;
 };
 
-class Hand: public Card {
+class Hand{
 public:
-	Hand();
+
+	Hand(int i = 1);
+	Hand(const Hand& h);
+	Hand& operator=(Hand h);
+	virtual ~Hand();
+	void swap(Hand& h);
+	//void push_back(const Card& h);
 	void print();
-	void update_hand();
+	//void update_hand();
 private:
-	//std::vector<Card> hand;
+	Card *theHand;
+	size_t size;
 };
 
 class Player : public Hand {
