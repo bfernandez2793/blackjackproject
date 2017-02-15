@@ -36,3 +36,30 @@ void Card::print()
 {
 	std::cout << "Rank: " << rank << " Suit: " << suit << "\n";
 }
+
+
+/**********************************
+Hand Class
+(class for handling a players hand)
+***********************************/
+
+Hand::Hand()
+{
+	Card new_card;
+	hand.push_back(new_card);
+}
+
+void Hand::print()
+{
+	for (size_t i = 0; i < hand.size(); ++i)
+		hand[i].print();
+	return;
+}
+void Hand::update_hand()
+{
+	Card new_card;
+	hand.push_back(new_card);
+	return;
+}
+
+

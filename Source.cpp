@@ -1,9 +1,11 @@
 #include <iostream>
 #include "card.h"
 int main() {
-	Card card;
-	card.print();
 
+	Hand hand;
+	hand.print();
+	hand.update_hand();
+	hand.print();
 
 
 	return 0;

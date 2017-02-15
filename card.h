@@ -1,6 +1,7 @@
 
 #include <string>
 #include <iostream>
+#include <vector>
 #ifndef CARDS_H
 #define CARDS_H
 
@@ -11,6 +12,15 @@ public:
 private:
 	int rank;
 	std::string suit;
+};
+
+class Hand: public Card {
+public:
+	Hand();
+	void print();
+	void update_hand();
+private:
+	std::vector<Card> hand;
 };
 
 
