@@ -16,7 +16,7 @@ private:
 	std::string suit;
 };
 
-class Hand: public Card {
+class Hand{
 public:
 	Hand();
 	void print();//print card in hand
@@ -25,16 +25,16 @@ public:
 	int Soft_hand();//compute soft value of hand
 private:
 	std::vector<Card> hand;
-	int value_of_hand;
+	int hard_val_hand;
 	int soft_val_hand;
 };
 
 class Player : public Hand {
 public:
-	Player(int i = 0);
-	int& get_cash();
+	Player();
+	int value_of_hand();
+	
 private:
-	int cash;
 };
 
 

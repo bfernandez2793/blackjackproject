@@ -36,7 +36,7 @@ Card::Card() {
 
 void Card::print()
 {
-	std::cout << "Rank: " << rank << " Suit: " << suit << "\n";
+	std::cout << rank << "~" << suit << "\n";
 }
 int Card::get_rank() {
 	return rank;
@@ -58,7 +58,6 @@ void Hand::print()
 	for (size_t i = 0; i < hand.size(); ++i)
 	{
 		hand[i].print();
-		std::cout << hand[i].get_rank() << "\n";
 	}
 	return;
 }
@@ -69,34 +68,39 @@ void Hand::update_hand()
 	return;
 }
 
-int Hand::Hard_hand()
-{
-	value_of_hand = 0;
-	for (size_t i = 0; i < hand.size(); ++i)
-		if(hand[i].get_rank() == 1)
-			value_of_hand += 11;
-		else
-			value_of_hand += hand[i].get_rank();
-	return value_of_hand;
-}
-
 int Hand::Soft_hand()
 {
 	soft_val_hand = 0;
 	for (size_t i = 0; i < hand.size(); ++i)
-		soft_val_hand += hand[i].get_rank();
+		if(hand[i].get_rank() == 1)
+			soft_val_hand += 11;
+		else
+			soft_val_hand += hand[i].get_rank();
 	return soft_val_hand;
+}
+
+int Hand::Hard_hand()
+{
+	hard_val_hand = 0;
+	for (size_t i = 0; i < hand.size(); ++i)
+		hard_val_hand += hand[i].get_rank();
+	return hard_val_hand;
 }
 
 /************************
 Player Class
 (Class to handle player)
 *************************/
-Player::Player(int i) :cash(i)
+Player::Player()
 {
 }
-int& Player::get_cash() {
-	return cash;
+
+int Player::value_of_hand()
+{
+	if (Soft_hand() < 21)
+		return Soft_hand();
+	return Hard_hand();
+	
 }
 
 
