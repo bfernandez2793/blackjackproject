@@ -38,23 +38,27 @@ int Card::get_rank() {
 }
 std::ostream& operator<<(std::ostream& out, const Card& c)
 {
-	out << c.rank << "~" << c.suit << "\n";
+	out << c.rank << "~" << c.suit << " ";
 	return out;
 }
 /**********************************
 Hand Class
 (class for handling a players hand)
 ***********************************/
-
 Hand::Hand()
 {
 	Card new_card;
 	hand.push_back(new_card);
 }
+int Hand::size()
+{
+	return hand.size();
+}
 std::ostream& operator<<(std::ostream& out, const Hand& h)
 {
 	for (size_t i = 0; i < h.hand.size(); ++i)
 		out << h.hand[i];
+	out << "\n";
 	return out;
 }
 void Hand::update_hand()
@@ -80,31 +84,53 @@ int Hand::Hard_hand()
 		hard_val_hand += hand[i].get_rank();
 	return hard_val_hand;
 }
-
-/************************
-Player Class
-(Class to handle player)
-*************************/
-Player::Player(int i ):cash(i)
-{
-}
-int Player::value_of_hand()
+int Hand::value_of_hand()
 {//if my soft hand is under 21 use the soft count else use the hard count
-	if (Soft_hand() < 21) 
+	if (Soft_hand() <= 21)
 		return Soft_hand();
 	return Hard_hand();
-	
+
 }
-bool Player::bust()
+bool Hand::bust()
 {
-	if(value_of_hand() > 21)
+	if (value_of_hand() > 21)
 		return true;
 	return false;
 }
 
-int& Player::money()
+/****************************
+Player Class
+(Class to handle player)
+*****************************/
+Player::Player(int i ):cash(i)
+{
+}
+bool Player::blackjack()
+{
+	if (size()==2 && value_of_hand() == 21)
+		return true;
+	return false;
+}
+double& Player::money()
 {
 	return cash;
 }
+/****************************
+Dealer Class
+*****************************/
 
+Dealer::Dealer()
+{
+}
 
+void Dealer::play( Player& player)
+{
+	//get another card if player did not bust
+	while ((Hard_hand() < 17) && (!player.bust()))
+	{//continue to get cards as long as my hard count is under 17
+		if (Soft_hand() <= 21 && Soft_hand() >= 17)
+			break; //if dealer has a soft count that is >= 17 or <=21, stop getting cards
+		else
+			update_hand();
+	}
+}

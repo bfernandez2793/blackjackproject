@@ -19,11 +19,14 @@ private:
 class Hand{
 protected:
 	Hand();//protected to prevent an instance of this class
+	int size();
 public:
 	friend std::ostream& operator<<(std::ostream&, const Hand&);//print card in hand
 	void update_hand();//get another card
 	int Hard_hand();//compute hard value of hand
 	int Soft_hand();//compute soft value of hand
+	int value_of_hand();//value of the players hand
+	bool bust();//did player bust
 private:
 	std::vector<Card> hand;
 	int hard_val_hand;
@@ -33,13 +36,16 @@ private:
 class Player : public Hand {
 public:
 	Player(int i = 0);
-	int value_of_hand();//value of the players hand
-	bool bust();//did player bust
-	int& money();
+	bool blackjack();//did player get blackjack
+	double& money();//player cash
 private:
-	int cash;
+	double cash;
 };
-
-
+class Dealer : public Hand {
+public:
+	Dealer();
+	void play(Player&);
+private:
+};
 
 #endif
