@@ -17,8 +17,9 @@ private:
 };
 
 class Hand{
+protected:
+	Hand();//protected to prevent an instance of this class
 public:
-	Hand();
 	void print();//print card in hand
 	void update_hand();//get another card
 	int Hard_hand();//compute hard value of hand
@@ -32,10 +33,11 @@ private:
 class Player : public Hand {
 public:
 	Player();
-	int value_of_hand();
-	
+	int value_of_hand();//value of the players hand
+	bool bust();
 private:
 };
+
 
 
 #endif

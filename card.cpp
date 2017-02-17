@@ -96,11 +96,18 @@ Player::Player()
 }
 
 int Player::value_of_hand()
-{
-	if (Soft_hand() < 21)
+{//if my soft hand is under 21 use the soft count else use the hard count
+	if (Soft_hand() < 21) 
 		return Soft_hand();
 	return Hard_hand();
 	
+}
+
+bool Player::bust()
+{
+	if(value_of_hand() > 21)
+		return true;
+	return false;
 }
 
 
