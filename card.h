@@ -38,8 +38,11 @@ public:
 	Player(int i = 0);
 	bool blackjack();//did player get blackjack
 	double& money();//player cash
+	int& bet();
+	bool double_down();
 private:
-	double cash;
+	double mcash;
+	int mbet;
 };
 class Dealer : public Hand {
 public:

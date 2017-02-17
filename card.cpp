@@ -97,12 +97,11 @@ bool Hand::bust()
 		return true;
 	return false;
 }
-
 /****************************
 Player Class
 (Class to handle player)
 *****************************/
-Player::Player(int i ):cash(i)
+Player::Player(int i ):mcash(i),mbet(i)
 {
 }
 bool Player::blackjack()
@@ -113,7 +112,29 @@ bool Player::blackjack()
 }
 double& Player::money()
 {
-	return cash;
+	return mcash;
+}
+int& Player::bet()
+{
+	return mbet;
+}
+bool Player::double_down()
+{
+	if (size() == 2)
+	{
+		char answer;
+		std::cout << "Your Cards: " << *this;
+		std::cout << "Would you like to double down?\n";
+		std::cin >> answer;
+		if (answer == 'y')
+		{
+			mbet = 2 * mbet;
+			update_hand();
+			std::cout << "Your Cards: " <<*this;
+			return true;
+		}
+	}
+	return false;
 }
 /****************************
 Dealer Class
