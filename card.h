@@ -32,10 +32,12 @@ private:
 
 class Player : public Hand {
 public:
-	Player();
+	Player(int i = 0);
 	int value_of_hand();//value of the players hand
 	bool bust();//did player bust
+	int& money();
 private:
+	int cash;
 };
 
 

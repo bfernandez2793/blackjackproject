@@ -85,7 +85,7 @@ int Hand::Hard_hand()
 Player Class
 (Class to handle player)
 *************************/
-Player::Player()
+Player::Player(int i ):cash(i)
 {
 }
 int Player::value_of_hand()
@@ -100,6 +100,11 @@ bool Player::bust()
 	if(value_of_hand() > 21)
 		return true;
 	return false;
+}
+
+int& Player::money()
+{
+	return cash;
 }
 
 

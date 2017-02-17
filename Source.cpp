@@ -3,11 +3,24 @@
 int main() {
 
 	
-	Player player1;
+	Player player1(100);
 	Player Dealer;
+	int bet;
 	char answer;
-	std::cout << "Would you like to play a game of blackjack?";
-	std::cin >> answer;
+	do
+	{
+		std::cout << "Would you like to play a game of blackjack?";
+		std::cin >> answer;
+		std::cin.clear();
+		std::cin.ignore(32767, '\n');
+	} while (answer != 'y' && answer != 'n');
+	do
+	{
+		std::cout << "Place your bet: ";
+		std::cin >> bet;
+		std::cin.clear();
+		std::cin.ignore(32767, '\n');
+	} while (bet < 0 || bet > player1.money());
 	player1.update_hand();
 	Dealer.update_hand();
 	/********************************************
@@ -39,16 +52,29 @@ int main() {
 	**********************************************/
 	std::cout << "Dealer Cards: \n" << Dealer;
 	std::cout << "Player: " << player1.value_of_hand() << " Dealer:" << Dealer.value_of_hand() << "\n";
-	std::cout << "Player: " << player1.bust() << " Dealer:" << Dealer.bust() << "\n";
 	if (player1.bust())
+	{
 		std::cout << "BUST!!! DEALER WINS!!!\n";
+		player1.money() -= bet;
+	}
 	else if (Dealer.bust())
-		std::cout << "PLAYER WINS!!!\n";
+	{
+		std::cout << "DEALER BUST!!! PLAYER WINS!!!\n";
+		player1.money() += bet;
+	}
 	else if (player1.value_of_hand() < Dealer.value_of_hand())
+	{
 		std::cout << "DEALER WINS!!!\n";
+		player1.money() -= bet;
+	}
 	else if (player1.value_of_hand() > Dealer.value_of_hand())
+	{
 		std::cout << "PLAYER WINS!!!\n";
+		player1.money() += bet;
+	}
 	else
 		std::cout << "TIE\n";
+
+	std::cout << "Players Cash: " << player1.money();
 	return 0;
 }
