@@ -33,14 +33,14 @@ Card::Card() {
 	default: break;
 	}
 }
-void Card::print()
-{
-	std::cout << rank << "~" << suit << "\n";
-}
 int Card::get_rank() {
 	return rank;
 }
-
+std::ostream& operator<<(std::ostream& out, const Card& c)
+{
+	out << c.rank << "~" << c.suit << "\n";
+	return out;
+}
 /**********************************
 Hand Class
 (class for handling a players hand)
@@ -51,13 +51,11 @@ Hand::Hand()
 	Card new_card;
 	hand.push_back(new_card);
 }
-void Hand::print()
+std::ostream& operator<<(std::ostream& out, const Hand& h)
 {
-	for (size_t i = 0; i < hand.size(); ++i)
-	{
-		hand[i].print();
-	}
-	return;
+	for (size_t i = 0; i < h.hand.size(); ++i)
+		out << h.hand[i];
+	return out;
 }
 void Hand::update_hand()
 {

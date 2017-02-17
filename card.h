@@ -9,7 +9,7 @@
 class Card {
 public:
 	Card();
-	void print();//print the information of the card
+	friend std::ostream& operator<<(std::ostream&, const Card&);//print the information of the card
 	int get_rank();//return rank
 private:
 	int rank;
@@ -20,7 +20,7 @@ class Hand{
 protected:
 	Hand();//protected to prevent an instance of this class
 public:
-	void print();//print card in hand
+	friend std::ostream& operator<<(std::ostream&, const Hand&);//print card in hand
 	void update_hand();//get another card
 	int Hard_hand();//compute hard value of hand
 	int Soft_hand();//compute soft value of hand
@@ -34,7 +34,7 @@ class Player : public Hand {
 public:
 	Player();
 	int value_of_hand();//value of the players hand
-	bool bust();
+	bool bust();//did player bust
 private:
 };
 

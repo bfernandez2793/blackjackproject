@@ -14,8 +14,7 @@ int main() {
 					PLAYERS PLAY
 	*********************************************/
 	do {
-		std::cout << "Your Cards: \n";
-		player1.print();
+		std::cout << "Your Cards: \n" << player1;
 		if (player1.bust())
 			break;
 		std::cout << "Would you like another card?\n";
@@ -38,8 +37,7 @@ int main() {
 	/*********************************************
 						OUTCOME
 	**********************************************/
-	std::cout << "Dealer Cards: \n";
-	Dealer.print();
+	std::cout << "Dealer Cards: \n" << Dealer;
 	std::cout << "Player: " << player1.value_of_hand() << " Dealer:" << Dealer.value_of_hand() << "\n";
 	std::cout << "Player: " << player1.bust() << " Dealer:" << Dealer.bust() << "\n";
 	if (player1.bust())
