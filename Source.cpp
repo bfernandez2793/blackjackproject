@@ -10,7 +10,6 @@ int main() {
 	std::cin >> answer;
 	player1.update_hand();
 	Dealer.update_hand();
-	bool bust = false;//true if player busts
 	/********************************************
 					PLAYERS PLAY
 	*********************************************/
@@ -41,8 +40,17 @@ int main() {
 	**********************************************/
 	std::cout << "Dealer Cards: \n";
 	Dealer.print();
-	
 	std::cout << "Player: " << player1.value_of_hand() << " Dealer:" << Dealer.value_of_hand() << "\n";
 	std::cout << "Player: " << player1.bust() << " Dealer:" << Dealer.bust() << "\n";
+	if (player1.bust())
+		std::cout << "BUST!!! DEALER WINS!!!\n";
+	else if (Dealer.bust())
+		std::cout << "PLAYER WINS!!!\n";
+	else if (player1.value_of_hand() < Dealer.value_of_hand())
+		std::cout << "DEALER WINS!!!\n";
+	else if (player1.value_of_hand() > Dealer.value_of_hand())
+		std::cout << "PLAYER WINS!!!\n";
+	else
+		std::cout << "TIE\n";
 	return 0;
 }

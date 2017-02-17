@@ -33,7 +33,6 @@ Card::Card() {
 	default: break;
 	}
 }
-
 void Card::print()
 {
 	std::cout << rank << "~" << suit << "\n";
@@ -52,7 +51,6 @@ Hand::Hand()
 	Card new_card;
 	hand.push_back(new_card);
 }
-
 void Hand::print()
 {
 	for (size_t i = 0; i < hand.size(); ++i)
@@ -67,7 +65,6 @@ void Hand::update_hand()
 	hand.push_back(new_card);
 	return;
 }
-
 int Hand::Soft_hand()
 {
 	soft_val_hand = 0;
@@ -78,7 +75,6 @@ int Hand::Soft_hand()
 			soft_val_hand += hand[i].get_rank();
 	return soft_val_hand;
 }
-
 int Hand::Hard_hand()
 {
 	hard_val_hand = 0;
@@ -94,7 +90,6 @@ Player Class
 Player::Player()
 {
 }
-
 int Player::value_of_hand()
 {//if my soft hand is under 21 use the soft count else use the hard count
 	if (Soft_hand() < 21) 
@@ -102,7 +97,6 @@ int Player::value_of_hand()
 	return Hard_hand();
 	
 }
-
 bool Player::bust()
 {
 	if(value_of_hand() > 21)
