@@ -54,3 +54,6 @@ Debug/blackjackproject.tlog/blackjackproject.lastbuildstate
 Debug/Source.obj
 *.idb
 Debug/vc140.pdb
+*.obj
+Debug/card.obj
+*.obj

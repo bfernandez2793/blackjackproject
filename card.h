@@ -31,6 +31,9 @@ public:
 	friend std::ostream& operator<<(std::ostream&, const Hand&);//print card in hand
 	int value_of_hand() ;//value of the players hand
 	bool bust();//did player bust
+	virtual double& money() = 0;
+	virtual int& bet() = 0;
+	virtual bool blackjack() = 0;
 private:
 	std::vector<Card> hand;
 	int hard_val_hand;
@@ -58,6 +61,10 @@ class Dealer : public Hand {
 public:
 	Dealer();
 	void play(bool);
+	double& money();
+	int& bet();
+	bool blackjack();
+
 private:
 };
 /****************************
@@ -67,8 +74,12 @@ class RandomPlayer : public Hand {
 public:	
 	RandomPlayer(int i = 0);
 	void play();
+	int& bet();
+	double& money();
+	bool blackjack();
 private:
-	int cash;
+	double mcash;
+	int mbet;
 };
 /****************************
 Non-Member Functions

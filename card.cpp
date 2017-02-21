@@ -101,7 +101,7 @@ bool Hand::bust()
 Player Class
 (Class to handle player)
 *****************************/
-Player::Player(int i ):mcash(i),mbet(i)
+Player::Player(int i ):mcash(i),mbet(0)
 {
 	update_hand();
 }
@@ -172,7 +172,7 @@ Dealer::Dealer()
 void Dealer::play(bool bust)
 {
 	//get another card if player did not bust
-	while ((Hard_hand() < 17) && (!bust)
+	while ((Hard_hand() < 17) && (!bust))
 	{//continue to get cards as long as hard count is under 17
 		if (Soft_hand() <= 21 && Soft_hand() >= 17)
 			break; //if dealer has a soft count that is >= 17 or <=21, stop getting cards
@@ -180,10 +180,25 @@ void Dealer::play(bool bust)
 			update_hand();
 	}
 }
+double & Dealer::money()
+{
+	double mbet = 0;
+		return mbet;
+}
+int & Dealer::bet()
+{
+	int bet = 0;
+	return bet;
+}
+bool Dealer::blackjack()
+{
+	return false;
+}
+
 /****************************
 Random Player Class
 *****************************/
-RandomPlayer::RandomPlayer(int i):cash(i)
+RandomPlayer::RandomPlayer(int i):mcash(i),mbet(0)
 {
 	update_hand();
 }
@@ -197,10 +212,20 @@ void RandomPlayer::play()
 			update_hand();
 	}
 }
+int& RandomPlayer::bet()
+{
+	srand(time(NULL));
+	mbet= 1 + rand() % static_cast<int>(mcash);
+	return mbet;
+}
+double& RandomPlayer::money()
+{
+	return mcash;
+}
+bool RandomPlayer::blackjack()
+{
+	return false;
+}
 /****************************
 Non-Member Functions
 *****************************/
-template<typename T, typename S, typename CMP = std::less<T>>
-bool is_less(const T& rhs, const S& lhs, CMP& cmp = CMP()) {
-	return cmp(rhs, lhs);
-}
