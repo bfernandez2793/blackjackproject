@@ -4,6 +4,7 @@ int main() {
 
 	Player player1(100);
 	Dealer Dealer;
+	RandomPlayer random1(100);
 	char answer;
 	do
 	{
@@ -19,39 +20,34 @@ int main() {
 		std::cin.clear();
 		std::cin.ignore(32767, '\n');
 	} while (player1.bet() < 0 || player1.bet() > player1.money());
-	player1.update_hand();
-	Dealer.update_hand();
 	if (player1.blackjack())//immediate blackjack
 		std::cout << "BLACKJACK!!!\n";
 	else {
 		/************************************************
 						PLAYERS PLAY
 		*************************************************/
-		bool dd = player1.double_down();
-		while (answer == 'y' && !dd) 
-		{
-			std::cout << "Your Cards: " << player1;
-			if (player1.bust())
-				break;
-			do {
-				std::cout << "Would you like another card?\n";
-				std::cin >> answer;
-				std::cin.clear();
-				std::cin.ignore(32767, '\n');
-			} while (answer != 'n' && answer != 'y');
-			if (answer == 'y')
-				player1.update_hand();
-		} 
+		player1.play();
+		random1.play();
+		bool bust = false;
+		if (player1.bust() && random1.bust())
+			bust = true;
+		std::cout << random1.value_of_hand() << "\n";
+		std::cout << bust << "\n";
 		/************************************************
 						DEALERS PLAY
 		*************************************************/
 		Dealer.play(player1);
 		}
+
+
 	/*********************************************
 						OUTCOME
 	**********************************************/
+	std::vector<Hand*> paticipants = { &player1, &Dealer };//base class pointers to derived class objects(polymorphism)
+
 	std::cout << "Dealer Cards: " << Dealer;
-	std::cout << "Player: " << player1.value_of_hand() << " Dealer:" << Dealer.value_of_hand() << "\n";
+	std::cout << "Player: " << paticipants[0]->value_of_hand() << " Dealer:" << paticipants[1]->value_of_hand() << "\n";
+	
 	if (player1.bust())
 	{
 		std::cout << "BUST!!! DEALER WINS!!!\n";

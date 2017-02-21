@@ -91,7 +91,7 @@ int Hand::value_of_hand()
 	return Hard_hand();
 
 }
-bool Hand::bust()
+bool Hand::bust() 
 {
 	if (value_of_hand() > 21)
 		return true;
@@ -103,6 +103,7 @@ Player Class
 *****************************/
 Player::Player(int i ):mcash(i),mbet(i)
 {
+	update_hand();
 }
 bool Player::blackjack()
 {
@@ -142,22 +143,64 @@ bool Player::double_down()
 	}
 	return false;
 }
+void Player::play()
+{
+	char answer;
+	if(!double_down())
+	do 
+	{
+		std::cout << "Your Cards: " << *this;
+		if (bust())
+			break;
+		do {
+			std::cout << "Would you like another card?\n";
+			std::cin >> answer;
+			std::cin.clear();
+			std::cin.ignore(32767, '\n');
+		} while (answer != 'n' && answer != 'y');
+		if (answer == 'y')
+			update_hand();
+	} while (answer == 'y');
+}
 /****************************
 Dealer Class
 *****************************/
-
 Dealer::Dealer()
 {
+	update_hand();
 }
-
-void Dealer::play( Player& player)
+void Dealer::play(bool bust)
 {
 	//get another card if player did not bust
-	while ((Hard_hand() < 17) && (!player.bust()))
-	{//continue to get cards as long as my hard count is under 17
+	while ((Hard_hand() < 17) && (!bust)
+	{//continue to get cards as long as hard count is under 17
 		if (Soft_hand() <= 21 && Soft_hand() >= 17)
 			break; //if dealer has a soft count that is >= 17 or <=21, stop getting cards
 		else
 			update_hand();
 	}
+}
+/****************************
+Random Player Class
+*****************************/
+RandomPlayer::RandomPlayer(int i):cash(i)
+{
+	update_hand();
+}
+void RandomPlayer::play()
+{
+	while (Hard_hand() < 17)
+	{//continue to get cards as long as hard count is under 17
+		if (Soft_hand() <= 21 && Soft_hand() >= 17)
+			break; //if player has a soft count that is >= 17 or <=21, stop getting cards
+		else
+			update_hand();
+	}
+}
+/****************************
+Non-Member Functions
+*****************************/
+template<typename T, typename S, typename CMP = std::less<T>>
+bool is_less(const T& rhs, const S& lhs, CMP& cmp = CMP()) {
+	return cmp(rhs, lhs);
 }
