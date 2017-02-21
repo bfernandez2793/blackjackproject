@@ -2,34 +2,75 @@
 #include <string>
 #include <iostream>
 #include <vector>
+#include <ctime>
 #ifndef CARDS_H
 #define CARDS_H
-
+/****************************
+Card Class
+*****************************/
 class Card {
 public:
 	Card();
-	void print();//print the information of the card
+	friend std::ostream& operator<<(std::ostream&, const Card&);//print the information of the card
+	int get_rank();//return rank
 private:
 	int rank;
 	std::string suit;
 };
-
-class Hand: public Card {
+/****************************
+Hand Class(Base Class)
+*****************************/
+class Hand{
+protected:
+	Hand();//protected to prevent an instance of this class
+	int size();//size of hand
+	int Hard_hand();//compute hard value of hand
+	int Soft_hand();//compute soft value of hand
+	void update_hand();//get another card
 public:
-	Hand();
-	void print();
-	void update_hand();
+	friend std::ostream& operator<<(std::ostream&, const Hand&);//print card in hand
+	int value_of_hand() ;//value of the players hand
+	bool bust();//did player bust
 private:
 	std::vector<Card> hand;
+	int hard_val_hand;
+	int soft_val_hand;
 };
-
+/****************************
+Player Class(Derived Class)
+*****************************/
 class Player : public Hand {
 public:
 	Player(int i = 0);
-	int& get_cash();
+	bool blackjack();//did player get blackjack
+	double& money();//player cash
+	int& bet();
+	bool double_down();
+	void play();
+private:
+	double mcash;
+	int mbet;
+};
+/****************************
+Dealer Class(Derived Class)
+*****************************/
+class Dealer : public Hand {
+public:
+	Dealer();
+	void play(bool);
+private:
+};
+/****************************
+Random Player Class(Derived Class)
+*****************************/
+class RandomPlayer : public Hand {
+public:	
+	RandomPlayer(int i = 0);
+	void play();
 private:
 	int cash;
 };
-
-
+/****************************
+Non-Member Functions
+*****************************/
 #endif
