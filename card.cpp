@@ -124,8 +124,14 @@ bool Player::double_down()
 	{
 		char answer;
 		std::cout << "Your Cards: " << *this;
-		std::cout << "Would you like to double down?\n";
-		std::cin >> answer;
+
+		do {
+			std::cout << "Would you like to double down?\n";
+			std::cin >> answer;
+			std::cin.clear();
+			std::cin.ignore(32767, '\n');
+		} while (answer != 'n' && answer != 'y');
+
 		if (answer == 'y')
 		{
 			mbet = 2 * mbet;
