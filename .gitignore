@@ -45,11 +45,4 @@ $RECYCLE.BIN/
 Network Trash Folder
 Temporary Items
 .apdisk
-*.obj
-*.vcxproj
-Debug/blackjackproject.tlog/CL.command.1.tlog
-*.tlog
-Debug/blackjackproject.log
-*.idb
-blackjackproject.vcxproj.filters
-*.pdb
+
