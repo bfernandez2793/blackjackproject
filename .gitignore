@@ -57,3 +57,8 @@ Debug/vc140.pdb
 *.obj
 Debug/card.obj
 *.obj
+Debug/card.obj
+*.pdb
+Debug/card.obj
+*.obj
+*.obj
