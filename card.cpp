@@ -47,6 +47,7 @@ Hand Class
 ***********************************/
 Hand::Hand()
 {
+	//initialize a hand with one card
 	Card new_card;
 	hand.push_back(new_card);
 }
@@ -105,11 +106,24 @@ Player::Player(int i ):mcash(i),mbet(0)
 {
 	update_hand();
 }
-bool Player::blackjack()
+void Player::play()
 {
-	if (size()==2 && value_of_hand() == 21)
-		return true;
-	return false;
+	char answer;
+	if (!double_down())
+		do
+		{
+			std::cout << "Your Cards: " << *this;
+			if (bust())
+				break;
+			do {
+				std::cout << "Would you like another card?\n";
+				std::cin >> answer;
+				std::cin.clear();
+				std::cin.ignore(32767, '\n');
+			} while (answer != 'n' && answer != 'y');
+			if (answer == 'y')
+				update_hand();
+		} while (answer == 'y');
 }
 double& Player::money()
 {
@@ -118,6 +132,12 @@ double& Player::money()
 int& Player::bet()
 {
 	return mbet;
+}
+bool Player::blackjack()
+{
+	if (size() == 2 && value_of_hand() == 21)
+		return true;
+	return false;
 }
 bool Player::double_down()
 {
@@ -143,29 +163,11 @@ bool Player::double_down()
 	}
 	return false;
 }
-void Player::play()
-{
-	char answer;
-	if(!double_down())
-	do 
-	{
-		std::cout << "Your Cards: " << *this;
-		if (bust())
-			break;
-		do {
-			std::cout << "Would you like another card?\n";
-			std::cin >> answer;
-			std::cin.clear();
-			std::cin.ignore(32767, '\n');
-		} while (answer != 'n' && answer != 'y');
-		if (answer == 'y')
-			update_hand();
-	} while (answer == 'y');
-}
+
 /****************************
 Dealer Class
 *****************************/
-Dealer::Dealer()
+Dealer::Dealer():mcash(0),mbet(0)
 {
 	update_hand();
 }
@@ -180,15 +182,13 @@ void Dealer::play(bool bust)
 			update_hand();
 	}
 }
-double & Dealer::money()
+double& Dealer::money()
 {
-	double mbet = 0;
-		return mbet;
+		return mcash;
 }
-int & Dealer::bet()
+int& Dealer::bet()
 {
-	int bet = 0;
-	return bet;
+	return mbet;
 }
 bool Dealer::blackjack()
 {
@@ -198,9 +198,11 @@ bool Dealer::blackjack()
 /****************************
 Random Player Class
 *****************************/
-RandomPlayer::RandomPlayer(int i):mcash(i),mbet(0)
+RandomPlayer::RandomPlayer(int i):mcash(i)
 {
 	update_hand();
+	srand(time(NULL));
+	mbet = 1 + rand() % static_cast<int>(mcash/2);
 }
 void RandomPlayer::play()
 {
@@ -212,18 +214,18 @@ void RandomPlayer::play()
 			update_hand();
 	}
 }
-int& RandomPlayer::bet()
-{
-	srand(time(NULL));
-	mbet= 1 + rand() % static_cast<int>(mcash);
-	return mbet;
-}
 double& RandomPlayer::money()
 {
 	return mcash;
 }
+int& RandomPlayer::bet()
+{
+	return mbet;
+}
 bool RandomPlayer::blackjack()
 {
+	if (size() == 2 && value_of_hand() == 21)
+		return true;
 	return false;
 }
 /****************************

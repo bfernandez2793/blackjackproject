@@ -40,21 +40,6 @@ private:
 	int soft_val_hand;
 };
 /****************************
-Player Class(Derived Class)
-*****************************/
-class Player : public Hand {
-public:
-	Player(int i = 0);
-	bool blackjack();//did player get blackjack
-	double& money();//player cash
-	int& bet();
-	bool double_down();
-	void play();
-private:
-	double mcash;
-	int mbet;
-};
-/****************************
 Dealer Class(Derived Class)
 *****************************/
 class Dealer : public Hand {
@@ -66,6 +51,24 @@ public:
 	bool blackjack();
 
 private:
+	double mcash;
+	int mbet;
+};
+/****************************
+Player Class(Derived Class)
+*****************************/
+class Player : public Hand {
+public:
+	Player(int i = 0);
+	void play();
+	double& money();//player cash
+	int& bet();
+	bool blackjack();//did player get blackjack
+	bool double_down();
+	
+private:
+	double mcash;
+	int mbet;
 };
 /****************************
 Random Player Class(Derived Class)
@@ -74,9 +77,9 @@ class RandomPlayer : public Hand {
 public:	
 	RandomPlayer(int i = 0);
 	void play();
-	int& bet();
-	double& money();
-	bool blackjack();
+	double& money();//player cash
+	int& bet();//player bet
+	bool blackjack();//did player get blackjack
 private:
 	double mcash;
 	int mbet;

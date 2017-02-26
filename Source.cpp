@@ -5,6 +5,9 @@ int main() {
 	Player player1(100);
 	Dealer Dealer;
 	RandomPlayer random1(100);
+	RandomPlayer random2(200);
+	std::vector<Hand*> participants = { &player1, &random1, &random2, &Dealer };//base class pointers to derived class objects(polymorphism)
+
 	char answer;
 	do
 	{
@@ -28,49 +31,47 @@ int main() {
 		*************************************************/
 		player1.play();
 		random1.play();
+		random2.play();
 		bool bust = false;
-		if (player1.bust() && random1.bust())//if all players bust
+		if (player1.bust() && random1.bust() && random2.bust())//if all players bust
 			bust = true;
 		/************************************************
 						DEALERS PLAY
 		*************************************************/
 		Dealer.play(bust);
 		}
-
-
 	/*********************************************
 						OUTCOME
 	**********************************************/
-	std::vector<Hand*> paticipants = { &player1, &random1, &Dealer };//base class pointers to derived class objects(polymorphism)
-	std::cout << "Random player Cards: " << random1;
+	std::cout << "Random player 1 Cards: " << random1;
+	std::cout << "Random player 2 Cards: " << random2;
 	std::cout << "Dealer Cards: " << Dealer;
-	std::cout << "Player: " << paticipants[0]->value_of_hand() << " Random: " << paticipants[1]->value_of_hand() << " Dealer: " << paticipants[2]->value_of_hand() <<"\n";
-	for (int i = 0; i < paticipants.size()-1; ++i) {
-		if (paticipants[i]->bust())
+	std::cout << "Player: " << participants[0]->value_of_hand() << " Random1: " << participants[1]->value_of_hand() << " Random2: " << participants[2]->value_of_hand() << " Dealer: " << participants[3]->value_of_hand() <<"\n";
+	
+	for (size_t i = 0; i < participants.size()-1; ++i) {
+		if (participants[i]->bust())
 		{
-			std::cout << "BUST!!!\n";
-			paticipants[i]->money() -= paticipants[i]->bet();
+			//player has a bust hand
+			participants[i]->money() -= participants[i]->bet();
 		}
 		else if (Dealer.bust())
 		{
-			//std::cout << "DEALER BUST!!! PLAYER WINS!!!\n";
-			paticipants[i]->money() += paticipants[i]->bet();
+			//dealer bust
+			participants[i]->money() += participants[i]->bet();
 		}
-		else if (paticipants[i]->value_of_hand() < Dealer.value_of_hand())
+		else if (participants[i]->value_of_hand() < Dealer.value_of_hand())
 		{
-			//std::cout << "DEALER WINS!!!\n";
-			paticipants[i]->money() -= paticipants[i]->bet();
+			//player has a losing hand
+			participants[i]->money() -= participants[i]->bet();
 		}
-		else if (paticipants[i]->value_of_hand() > Dealer.value_of_hand())
+		else if (participants[i]->value_of_hand() > Dealer.value_of_hand())
 		{
-			//std::cout << "PLAYER WINS!!!\n";
-			paticipants[i]->money() += paticipants[i]->bet();
-			if (paticipants[i]->blackjack())
-				paticipants[i]->money() += 0.5*paticipants[i]->bet();
+			//player has a winning hand
+			participants[i]->money() += participants[i]->bet();
+			if (participants[i]->blackjack())
+				participants[i]->money() += 0.5*participants[i]->bet();
 		}
-		//else
-			//std::cout << "TIE\n";
-		std::cout << "Player " << i << " Cash: " << paticipants[i]->money() << "\n";
+		std::cout << "Player " << i << " Bet: "<< participants[i]->bet() << " Cash: " << participants[i]->money() << "\n";
 	}
 	
 	return 0;
