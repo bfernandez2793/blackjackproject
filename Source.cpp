@@ -4,6 +4,8 @@ int main() {
 
 	Player player1(100);
 	Dealer Dealer;
+	int players = 5;
+	//Game game(2);
 	RandomPlayer random1(100);
 	RandomPlayer random2(200);
 	std::vector<Hand*> participants = { &player1, &random1, &random2, &Dealer };//base class pointers to derived class objects(polymorphism)
@@ -30,10 +32,11 @@ int main() {
 						PLAYERS PLAY
 		*************************************************/
 		player1.play();
-		random1.play();
-		random2.play();
+		//random1.play();
+		//random2.play();
+		//game.play();
 		bool bust = false;
-		if (player1.bust() && random1.bust() && random2.bust())//if all players bust
+		if (player1.bust() && game.bust())//if all players bust
 			bust = true;
 		/************************************************
 						DEALERS PLAY
