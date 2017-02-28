@@ -39,7 +39,6 @@ int Card::get_rank() {
 std::string Card::get_string(){
     return suit;
 }
-
 std::ostream& operator<<(std::ostream& out, const Card& c)
 {
     out << c.rank << "~" << c.suit << " ";
@@ -108,72 +107,6 @@ Hand::~Hand()
 }
 
 /****************************
-Player Class
-(Class to handle player)
-*****************************/
-/*Player::Player(int i ):mcash(i),mbet(0)
-{
-    update_hand();
-}
-void Player::play()
-{
-    char answer;
-    if (!double_down())
-        do
-        {
-            std::cout << "Your Cards: " << *this;
-            if (bust())
-                break;
-            do {
-                std::cout << "Would you like another card?\n";
-                std::cin >> answer;
-                std::cin.clear();
-                std::cin.ignore(32767, '\n');
-            } while (answer != 'n' && answer != 'y');
-            if (answer == 'y')
-                update_hand();
-        } while (answer == 'y');
-}
-double& Player::money()
-{
-    return mcash;
-}
-int& Player::bet()
-{
-    return mbet;
-}
-bool Player::blackjack()
-{
-    if (size() == 2 && value_of_hand() == 21)
-        return true;
-    return false;
-}
-bool Player::double_down()
-{
-    if (size() == 2)
-    {
-        char answer;
-        std::cout << "Your Cards: " << *this;
-
-        do {
-            std::cout << "Would you like to double down?\n";
-            std::cin >> answer;
-            std::cin.clear();
-            std::cin.ignore(32767, '\n');
-        } while (answer != 'n' && answer != 'y');
-
-        if (answer == 'y')
-        {
-            mbet = 2 * mbet;
-            update_hand();
-            std::cout << "Your Cards: " <<*this;
-            return true;
-        }
-    }
-    return false;
-}
-*/
-/****************************
 Dealer Class
 *****************************/
 Dealer::Dealer():mcash(0),mbet(0)
@@ -203,7 +136,6 @@ bool Dealer::blackjack()
 {
     return false;
 }
-
 
 /****************************
 Random Player Class
@@ -238,36 +170,4 @@ bool RandomPlayer::blackjack()
         return true;
     return false;
 }
-/****************************
-Game Class
-*****************************/
-/*Game::Game(int i): players(i), playerPtr(nullptr),mbust(false)
-{
-    try {
-        playerPtr = new RandomPlayer[players];
-    }
-    catch (std::exception& e) {
-        if (playerPtr != nullptr)
-            delete[] playerPtr;
-        throw e;
-    }
-}
 
-void Game::play()
-{
-    for (size_t i = 0; i < players; ++i)
-    {
-        playerPtr[i].play();
-        if (playerPtr[i].bust())
-            mbust = true;
-    }
-}
-bool Game::bust()
-{
-    return mbust;
-}
-Game::~Game()
-{
-    delete[] playerPtr;
-}
-*/

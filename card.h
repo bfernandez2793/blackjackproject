@@ -55,22 +55,6 @@ private:
     double mcash;
     int mbet;
 };
-/****************************
-Player Class(Derived Class)
-*****************************/
-/*class Player : public Hand {
-public:
-    Player(int i = 0);
-    void play();
-    double& money();//player cash
-    int& bet();
-    bool blackjack();//did player get blackjack
-    bool double_down();
-
-private:
-    double mcash;
-    int mbet;
-};*/
 
 /****************************
 Random Player Class(Derived Class)
@@ -86,21 +70,6 @@ private:
     double mcash;
     int mbet;
 };
-/****************************
-Game Class
-*****************************/
-/*class Game {
-public:
-    Game(int i = 0);
-    Game(const Game&) = delete;
-    Game& operator=(Game) = delete;
-    void play();
-    bool bust();
-    virtual ~Game();
-private:
-    int players;
-    RandomPlayer* playerPtr;
-    bool mbust;
-};*/
+
 
 #endif // CARD_H
