@@ -7,28 +7,48 @@
     <x>0</x>
     <y>0</y>
     <width>621</width>
-    <height>315</height>
+    <height>352</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
+   <widget class="QLabel" name="textlabel">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>240</y>
+      <width>47</width>
+      <height>13</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>TextLabel</string>
+    </property>
+   </widget>
    <widget class="QWidget" name="">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>0</y>
-      <width>258</width>
+      <width>261</width>
       <height>225</height>
      </rect>
     </property>
-    <layout class="QGridLayout" name="gridLayout_2">
+    <layout class="QFormLayout" name="formLayout">
      <item row="0" column="0">
       <widget class="QTextBrowser" name="textBrowser"/>
      </item>
      <item row="1" column="0">
       <layout class="QGridLayout" name="gridLayout">
+       <item row="0" column="1">
+        <widget class="QPushButton" name="hitButton">
+         <property name="text">
+          <string>Hit</string>
+         </property>
+        </widget>
+       </item>
        <item row="0" column="2">
         <widget class="QPushButton" name="standButton">
          <property name="text">
@@ -43,22 +63,10 @@
          </property>
         </widget>
        </item>
-       <item row="0" column="1">
-        <widget class="QPushButton" name="hitButton">
-         <property name="text">
-          <string>Hit</string>
-         </property>
-        </widget>
-       </item>
       </layout>
      </item>
     </layout>
    </widget>
-   <zorder>hitButton</zorder>
-   <zorder>startButton</zorder>
-   <zorder>standButton</zorder>
-   <zorder>textBrowser</zorder>
-   <zorder>hitButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

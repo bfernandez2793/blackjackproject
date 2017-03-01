@@ -65,3 +65,5 @@ Debug/card.obj
 *.obj
 untitled2.pro.user
 *.obj
+mainwindow.ui
+*.ui

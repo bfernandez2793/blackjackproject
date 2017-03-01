@@ -2,8 +2,9 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QLCDNumber>
 #include <QTextEdit>
+#include <QInputDialog>
+#include <QDir>
 #include "card.h"
 namespace Ui {
 class MainWindow;
@@ -26,12 +27,12 @@ private slots:
     void setOutput();//output to text(temporary)
     void setStand();//dont not allow player to get more cards
     void setEndgame();
+    void setBet(int);
 
 private:
     RandomPlayer player;
     Dealer dealer;
     Ui::MainWindow *ui;
-    QLCDNumber *mnumberer;
     QTextEdit *text;
 };
 
