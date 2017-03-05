@@ -143,6 +143,7 @@ Random Player Class
 RandomPlayer::RandomPlayer(int i):mcash(i)
 {
     update_hand();
+
     //srand(time(NULL));
     mbet = 1 + rand() % static_cast<int>(mcash/2);
 }

@@ -3,7 +3,7 @@
 
 
 
-MainWindow::MainWindow(QWidget *parent):QMainWindow(parent),ui(new Ui::MainWindow),player(100)
+MainWindow::MainWindow(QWidget *parent):QMainWindow(parent),ui(new Ui::MainWindow),player(100),player2(100)
 {
     setFixedSize(400, 400);
     ui->setupUi(this);
@@ -17,6 +17,10 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent),ui(new Ui::MainWindo
     QObject::connect(this,SIGNAL(bust()),this,SLOT(setStand()));//if bust dont allow the player to get more cards
     QObject::connect(this,SIGNAL(hand_changed()),this,SLOT(setOutput()));//update any change in the players hand
     QObject::connect(this,SIGNAL(endgame()),this,SLOT(setEndgame()));//output the results of the game
+    handptrs.push_back(&player);
+    handptrs.push_back(&player2);
+
+
 }
 
 MainWindow::~MainWindow()
@@ -33,6 +37,7 @@ void MainWindow::setGame()
     player.bet() = QInputDialog::getInt(this, tr("Place your bet"),tr("Bet:"),0,0,player.money(),1);
     ui->textBrowser->insertPlainText("Cash: $" + QString::number(player.money()) +"\nPlayer 1:");
     emit hand_changed();
+
     if(player.blackjack())
         emit endgame();
     std::cout << "Start Game\n";
@@ -53,6 +58,8 @@ void MainWindow::setStand()
     std::cout << "Set Stand status\n";
     ui->hitButton->setEnabled(false);
     ui->standButton->setEnabled(false);
+    ui->doubleButton->setEnabled(false);
+    player2.play();
     dealer.play(player.bust());
     std::cout << dealer;
     emit endgame();
@@ -71,27 +78,35 @@ void MainWindow::setDouble()
 }
 void MainWindow::setEndgame()
 {
+
+    ui->textBrowser->insertPlainText("\nPlayer2: "+ QString::number(player2.value_of_hand()));
     ui->textBrowser->insertPlainText("\nDealer: " + QString::number(dealer.value_of_hand())) ;
-    if (player.bust())
+
+    for(auto& x: handptrs)
     {
-        player.money() -= player.bet();
-        ui->textBrowser->insertPlainText("\nPlayer Bust!! Dealer Wins!! \nCash: $" + QString::number(player.money()));
+        if (x->bust())
+        {
+            x->money() -= x->bet();
+            ui->textBrowser->insertPlainText("\nPlayer Bust!! Dealer Wins!! Cash: $" + QString::number(player.money()));
+        }
+        else if (dealer.bust())
+        {
+            x->money() += x->bet();
+            ui->textBrowser->insertPlainText("\nDealer Bust!! Player Wins!! Cash: $" + QString::number(x->money()));
+        }
+        else if (x->value_of_hand() < dealer.value_of_hand())
+        {
+            x->money() -= x->bet();
+            ui->textBrowser->insertPlainText("\nDealer Wins!! Cash: $" + QString::number(x->money()));
+        }
+        else if (x->value_of_hand() > dealer.value_of_hand())
+        {
+            x->money() += x->bet();
+            ui->textBrowser->insertPlainText("\nPlayer Wins!! Cash: $" + QString::number(x->money()));
+        }
+        else
+            ui->textBrowser->insertPlainText("\nTie!!");
     }
-    else if (dealer.bust())
-    {
-        player.money() += player.bet();
-        ui->textBrowser->insertPlainText("\nDealer Bust!! Player Wins!! \nCash: $" + QString::number(player.money()));
-    }
-    else if (player.value_of_hand() < dealer.value_of_hand())
-    {
-        player.money() -= player.bet();
-        ui->textBrowser->insertPlainText("\nDealer Wins!! \nCash: $" + QString::number(player.money()));
-    }
-    else if (player.value_of_hand() > dealer.value_of_hand())
-    {
-        player.money() += player.bet();
-        ui->textBrowser->insertPlainText("\nPlayer Wins!! \nCash: $" + QString::number(player.money()));
-    }
-    else
-        ui->textBrowser->insertPlainText("\nTie!!");
+
+
 }

@@ -33,7 +33,9 @@ private slots:
 
 private:
     RandomPlayer player;
+    RandomPlayer player2;
     Dealer dealer;
+    std::vector <Hand*> handptrs;
     Ui::MainWindow *ui;
     QTextEdit *text;
 };
