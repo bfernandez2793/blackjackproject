@@ -20,14 +20,14 @@ public:
 signals:
     void hand_changed();//signal when hand has changed
     void bust();//signal when player has bust
-    void endgame();
+    void endgame();//signal game has ended
 private slots:
     void setGame();//start game
     void setHand();//update hand
     void setDouble();//double down
     void setOutput();//output to text(temporary)
     void setStand();//dont not allow player to get more cards
-    void setEndgame();
+    void setEndgame();//output results reset game
 
 
 

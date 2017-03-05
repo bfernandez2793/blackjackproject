@@ -51,9 +51,6 @@ Hand Class
 ***********************************/
 Hand::Hand()
 {
-    //initialize a hand with one card
-    Card new_card;
-    hand.push_back(new_card);
 }
 size_t Hand::size()
 {
@@ -102,6 +99,9 @@ bool Hand::bust()
         return true;
     return false;
 }
+void Hand::reset(){
+    hand.clear();
+}
 Hand::~Hand()
 {
 }
@@ -111,10 +111,11 @@ Dealer Class
 *****************************/
 Dealer::Dealer():mcash(0),mbet(0)
 {
-    update_hand();
 }
 void Dealer::play(bool bust)
 {
+    update_hand();
+    update_hand();
     //get another card if player did not bust
     while ((Hard_hand() < 17) && (!bust))
     {//continue to get cards as long as hard count is under 17
@@ -142,9 +143,10 @@ Random Player Class
 *****************************/
 RandomPlayer::RandomPlayer(int i):mcash(i)
 {
+}
+void RandomPlayer::start(){
     update_hand();
-
-    //srand(time(NULL));
+    update_hand();
     mbet = 1 + rand() % static_cast<int>(mcash/2);
 }
 void RandomPlayer::play()

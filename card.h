@@ -31,6 +31,7 @@ public:
     void update_hand();//get another card
     friend std::ostream& operator<<(std::ostream&, const Hand&);//print card in hand
     int value_of_hand() ;//value of the players hand
+    void reset();
     bool bust();//did player bust
     virtual double& money() = 0;
     virtual int& bet() = 0;
@@ -62,6 +63,7 @@ Random Player Class(Derived Class)
 class RandomPlayer : public Hand {
 public:
     RandomPlayer(int i = 0);
+    void start();
     void play();
     double& money();//player cash
     int& bet();//player bet
