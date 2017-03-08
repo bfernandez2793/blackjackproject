@@ -12,10 +12,11 @@ public:
     Card();
     friend std::ostream& operator<<(std::ostream&, const Card&);//print the information of the card
     int get_rank();//return rank
-    std::string get_string();
+    std::string get_card_name();
 private:
-    int rank;
-    std::string suit;
+    int mrank;
+    std::string msuit;
+    std::string mrank_name;
 };
 /****************************
 Hand Class(Base Class)
@@ -30,17 +31,19 @@ public:
     size_t size();//size of hand
     void update_hand();//get another card
     friend std::ostream& operator<<(std::ostream&, const Hand&);//print card in hand
-    int value_of_hand() ;//value of the players hand
-    void reset();
-    bool bust();//did player bust
+    int value_of_hand() ;//value of the hand
+    void reset();//reset hand
+    bool bust();//is this a bust hand
+    std::string get_card_name();
     virtual double& money() = 0;
     virtual int& bet() = 0;
     virtual bool blackjack() = 0;
     virtual ~Hand();
 private:
-    std::vector<Card> hand;
-    int hard_val_hand;
-    int soft_val_hand;
+    std::vector<Card> mhand;
+    int mhard_val_hand;
+    int msoft_val_hand;
+    std::string mcard_name;
 };
 /****************************
 Dealer Class(Derived Class)

@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include <QPixmapCache>
 
 
 MainWindow::MainWindow(QWidget *parent):QMainWindow(parent),ui(new Ui::MainWindow),player(100),player2(100)
@@ -15,16 +15,19 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent),ui(new Ui::MainWindo
     QObject::connect(ui->standButton,SIGNAL(clicked(bool)),this,SLOT(setStand()));//update hand button
     QObject::connect(ui->doubleButton,SIGNAL(clicked(bool)),this,SLOT(setDouble()));//allow player double down
     QObject::connect(this,SIGNAL(bust()),this,SLOT(setStand()));//if bust dont allow the player to get more cards
+    QObject::connect(this,SIGNAL(dealer_hand_changed()),this,SLOT(setDealerHand()));
+    QObject::connect(this,SIGNAL(dealerStart()),this,SLOT(setDealerStart()));
     QObject::connect(this,SIGNAL(hand_changed()),this,SLOT(setOutput()));//update any change in the players hand
     QObject::connect(this,SIGNAL(endgame()),this,SLOT(setEndgame()));//output the results of the game
     QObject::connect(this,SIGNAL(finished()),this,SLOT(setFinished()));
     handptrs.push_back(&player);
-  //srand(time(NULL));
- //   int r = 0 + rand() % 5;
-    for(size_t i = 0; i < r; ++i)
-    {
-        handptrs.push_back(&player2);
-    }
+    handptrs.push_back(&player2);
+
+    verticalPicsLayout=new QHBoxLayout(ui->cardLabel);
+    verticalPicsLayout2=new QHBoxLayout(ui->cardLabel_2);
+
+    i = 0;
+    k = 0;
 }
 
 MainWindow::~MainWindow()
@@ -34,25 +37,29 @@ MainWindow::~MainWindow()
 void MainWindow::setGame()
 {
     //initializing the game for one player
+
     ui->standButton->setEnabled(true);
     ui->hitButton->setEnabled(true);
     ui->doubleButton->setEnabled(true);
     ui->startButton->setEnabled(false);
-    player.start();
-    player.bet() = QInputDialog::getInt(this, tr("Place your bet"),tr("Bet:"),0,0,player.money(),1);
     ui->textBrowser->setText("");
-    ui->textBrowser->insertPlainText("\nCash: $" + QString::number(player.money()) +"\nPlayer 0:");
+    player.bet() = QInputDialog::getInt(this, tr("Place your bet"),tr("Bet:"),0,0,player.money(),1);
+    player.update_hand();
     emit hand_changed();
+    player.update_hand();
+    emit hand_changed();
+    dealer.update_hand();
+    emit dealer_hand_changed();
+    dealer.update_hand();
+    emit dealer_hand_changed();
+    ui->textBrowser->insertPlainText("\nCash: $" + QString::number(player.money()) +"\nPlayer 0:");
     if(player.blackjack())
         emit endgame();
-    std::cout << "Start Game\n";
-    std::cout << player;
 }
 void MainWindow::setHand()
 {
     player.update_hand();
     emit hand_changed();
-    std::cout << player;
     if (player.size() != 2)
         ui->doubleButton->setEnabled(false);
     if(player.bust())
@@ -60,19 +67,54 @@ void MainWindow::setHand()
 }
 void MainWindow::setStand()
 {
-    std::cout << "Set Stand status\n";
     ui->hitButton->setEnabled(false);
     ui->standButton->setEnabled(false);
     ui->doubleButton->setEnabled(false);
-    player2.start();
     player2.play();
-    dealer.play(player.bust());
-    std::cout << dealer;
+    emit dealerStart();
     emit endgame();
 }
 void MainWindow::setOutput()
 {
-   ui->textBrowser->insertPlainText(QString::number(player.value_of_hand())+" ");
+    picture.load(QString::fromStdString(player.get_card_name())+".png");
+    ++i;
+    QLabel *picLabel = new QLabel(ui->cardLabel);
+    picLabel->setScaledContents(true);
+    picLabel->setPixmap(picture);
+    ui->cardLabel->resize(i*75,100);
+    verticalPicsLayout->addWidget(picLabel);
+    ui->textBrowser->insertPlainText(QString::number(player.value_of_hand())+" ");
+}
+void MainWindow::setDealerHand()
+{
+    if(dealer.size() == 1)
+    {
+        picture.load("back.png");
+        ++k;
+        dealerinitcard = dealer.get_card_name();
+        Dealerinit = new QLabel(ui->cardLabel_2);
+        Dealerinit->setScaledContents(true);
+        Dealerinit->setPixmap(picture);
+        ui->cardLabel_2->resize(k*75,100);
+        verticalPicsLayout2->addWidget(Dealerinit);
+    }
+    else
+    {
+        picture.load(QString::fromStdString(dealer.get_card_name())+".png");
+        ++k;
+        QLabel *picLabel = new QLabel(ui->cardLabel_2);
+        picLabel->setScaledContents(true);
+        picLabel->setPixmap(picture);
+        ui->cardLabel_2->resize(k*75,100);
+        verticalPicsLayout2->addWidget(picLabel);
+    }
+
+}
+void MainWindow::setDealerStart()
+{
+    picture.load(QString::fromStdString(dealerinitcard)+".png");
+    Dealerinit->setPixmap(picture);
+    dealer.play(player.bust());
 }
 void MainWindow::setDouble()
 {
@@ -121,6 +163,10 @@ void MainWindow::setEndgame()
     ui->startButton->setEnabled(true);
     if(handptrs[0]->money() == 0)
         emit finished();
+   // delete verticalPicsLayout->layout();
+    QPixmapCache::clear();
+
+
 }
 void MainWindow::setFinished(){
 
