@@ -83,13 +83,6 @@ std::string Card::get_card_name()
 {
     return mrank_name + "_of_" + msuit;
 }
-
-std::ostream& operator<<(std::ostream& out, const Card& c)
-{
-    out << c.mrank << "~" << c.msuit << " ";
-    return out;
-}
-
 /**********************************
 Hand Class
 (class for handling a players hand)
@@ -100,13 +93,6 @@ Hand::Hand()
 size_t Hand::size()
 {
     return mhand.size();
-}
-std::ostream& operator<<(std::ostream& out, const Hand& h)
-{
-    for (size_t i = 0; i < h.mhand.size(); ++i)
-        out << h.mhand[i];
-    out << "\n";
-    return out;
 }
 void Hand::update_hand()
 {
@@ -154,23 +140,15 @@ void Hand::reset(){
 Hand::~Hand()
 {
 }
-
 /****************************
 Dealer Class
 *****************************/
 Dealer::Dealer():mcash(0),mbet(0)
 {
 }
-void Dealer::play(bool bust)
+void Dealer::play()
 {
-    //get another card if player did not bust
-    while ((Hard_hand() < 17) && (!bust))
-    {//continue to get cards as long as hard count is under 17
-        if (Soft_hand() <= 21 && Soft_hand() >= 17)
-            break; //if dealer has a soft count that is >= 17 or <=21, stop getting cards
-        else
-            update_hand();
-    }
+    return;
 }
 double& Dealer::money()
 {
@@ -182,9 +160,10 @@ int& Dealer::bet()
 }
 bool Dealer::blackjack()
 {
+    if (size() == 2 && value_of_hand() == 21)
+        return true;
     return false;
 }
-
 /****************************
 Random Player Class
 *****************************/

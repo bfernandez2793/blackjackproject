@@ -10,7 +10,6 @@ Card Class
 class Card {
 public:
     Card();
-    friend std::ostream& operator<<(std::ostream&, const Card&);//print the information of the card
     int get_rank();//return rank
     std::string get_card_name();
 private:
@@ -24,16 +23,14 @@ Hand Class(Base Class)
 class Hand{
 protected:
     Hand();//protected to prevent an instance of this class
-    int Hard_hand();//compute hard value of hand
-    int Soft_hand();//compute soft value of hand
-
 public:
     size_t size();//size of hand
     void update_hand();//get another card
-    friend std::ostream& operator<<(std::ostream&, const Hand&);//print card in hand
     int value_of_hand() ;//value of the hand
     void reset();//reset hand
     bool bust();//is this a bust hand
+    int Hard_hand();//compute hard value of hand
+    int Soft_hand();//compute soft value of hand
     std::string get_card_name();
     virtual double& money() = 0;
     virtual int& bet() = 0;
@@ -51,11 +48,11 @@ Dealer Class(Derived Class)
 class Dealer : public Hand {
 public:
     Dealer();
-    void play(bool);
+    bool blackjack();
 private:
+    void play();
     double& money();
     int& bet();
-    bool blackjack();
     double mcash;
     int mbet;
 };

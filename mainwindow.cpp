@@ -3,7 +3,7 @@
 #include <QPixmapCache>
 
 
-MainWindow::MainWindow(QWidget *parent):QMainWindow(parent),ui(new Ui::MainWindow),player(100),player2(100)
+MainWindow::MainWindow(QWidget *parent):QMainWindow(parent),ui(new Ui::MainWindow),player(100)
 {
     setFixedSize(400, 400);
     ui->setupUi(this);
@@ -21,13 +21,13 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent),ui(new Ui::MainWindo
     QObject::connect(this,SIGNAL(endgame()),this,SLOT(setEndgame()));//output the results of the game
     QObject::connect(this,SIGNAL(finished()),this,SLOT(setFinished()));
     handptrs.push_back(&player);
-    handptrs.push_back(&player2);
+   // handptrs.push_back(&player2);
 
     verticalPicsLayout=new QHBoxLayout(ui->cardLabel);
     verticalPicsLayout2=new QHBoxLayout(ui->cardLabel_2);
 
-    i = 0;
-    k = 0;
+    //mcards2 = 0;
+   // mcards1 = 0;
 }
 
 MainWindow::~MainWindow()
@@ -36,8 +36,16 @@ MainWindow::~MainWindow()
 }
 void MainWindow::setGame()
 {
+    //reset cards before any new game
+    for(size_t j = 0; j < mDealerCards.size(); ++j)
+        delete mDealerCards[j];
+    mcards1=0;
+    mDealerCards.clear();
+    for(size_t j = 0; j < mPlayerCards.size(); ++j)
+        delete mPlayerCards[j];
+    mcards2=0;
+    mPlayerCards.clear();
     //initializing the game for one player
-
     ui->standButton->setEnabled(true);
     ui->hitButton->setEnabled(true);
     ui->doubleButton->setEnabled(true);
@@ -53,11 +61,13 @@ void MainWindow::setGame()
     dealer.update_hand();
     emit dealer_hand_changed();
     ui->textBrowser->insertPlainText("\nCash: $" + QString::number(player.money()) +"\nPlayer 0:");
-    if(player.blackjack())
+    if(player.blackjack()||dealer.blackjack())
         emit endgame();
 }
 void MainWindow::setHand()
 {
+    //anytime the hit button is hit update the players hand and check
+    //if the the hand is bust
     player.update_hand();
     emit hand_changed();
     if (player.size() != 2)
@@ -65,69 +75,88 @@ void MainWindow::setHand()
     if(player.bust())
         emit bust();
 }
-void MainWindow::setStand()
-{
-    ui->hitButton->setEnabled(false);
-    ui->standButton->setEnabled(false);
-    ui->doubleButton->setEnabled(false);
-    player2.play();
-    emit dealerStart();
-    emit endgame();
-}
-void MainWindow::setOutput()
-{
-    picture.load(QString::fromStdString(player.get_card_name())+".png");
-    ++i;
-    QLabel *picLabel = new QLabel(ui->cardLabel);
-    picLabel->setScaledContents(true);
-    picLabel->setPixmap(picture);
-    ui->cardLabel->resize(i*75,100);
-    verticalPicsLayout->addWidget(picLabel);
-    ui->textBrowser->insertPlainText(QString::number(player.value_of_hand())+" ");
-}
 void MainWindow::setDealerHand()
 {
+    //set the dealers hand
     if(dealer.size() == 1)
     {
-        picture.load("back.png");
-        ++k;
-        dealerinitcard = dealer.get_card_name();
-        Dealerinit = new QLabel(ui->cardLabel_2);
-        Dealerinit->setScaledContents(true);
-        Dealerinit->setPixmap(picture);
-        ui->cardLabel_2->resize(k*75,100);
-        verticalPicsLayout2->addWidget(Dealerinit);
+        picture.load("back.png");//initially only one card is visible to the players
+        ++mcards1;
+        mDealerInitCard = dealer.get_card_name();
+
+        QLabel *picLabel = new QLabel(ui->cardLabel_2);
+        mDealerCards.push_back(picLabel);
+        picLabel->setScaledContents(true);
+        picLabel->setPixmap(picture);
+        ui->cardLabel_2->resize(mcards1*75,100);
+        verticalPicsLayout2->addWidget(picLabel);
     }
     else
     {
         picture.load(QString::fromStdString(dealer.get_card_name())+".png");
-        ++k;
+        ++mcards1;
         QLabel *picLabel = new QLabel(ui->cardLabel_2);
+        mDealerCards.push_back(picLabel);
         picLabel->setScaledContents(true);
         picLabel->setPixmap(picture);
-        ui->cardLabel_2->resize(k*75,100);
+        ui->cardLabel_2->resize(mcards1*75,100);
         verticalPicsLayout2->addWidget(picLabel);
     }
 
 }
-void MainWindow::setDealerStart()
+void MainWindow::setOutput()
 {
-    picture.load(QString::fromStdString(dealerinitcard)+".png");
-    Dealerinit->setPixmap(picture);
-    dealer.play(player.bust());
+    //anytime the players hand get updated, then update the players hand on the screen
+    picture.load(QString::fromStdString(player.get_card_name())+".png");
+    ++mcards2;
+    QLabel *picLabel = new QLabel(ui->cardLabel);
+    mPlayerCards.push_back(picLabel);
+    picLabel->setScaledContents(true);
+    picLabel->setPixmap(picture);
+    ui->cardLabel->resize(mcards2*75,100);
+    verticalPicsLayout->addWidget(picLabel);
+    ui->textBrowser->insertPlainText(QString::number(player.value_of_hand())+" ");
 }
 void MainWindow::setDouble()
 {
-    std::cout << player;
-    player.update_hand();
-    player.bet() = 2*player.bet();
-    emit hand_changed();
+    //If the player doubles down and has enough cash then perform the following
+    if(player.money() >= 2*player.bet())
+    {
+        player.update_hand();
+        player.bet() = 2*player.bet();
+        emit hand_changed();
+        emit dealerStart();
+        emit endgame();
+    }
+}
+void MainWindow::setStand()
+{
+    //when the player stands then the dealer begins play
+    emit dealerStart();
     emit endgame();
+}
+void MainWindow::setDealerStart()
+{
+   //get another card if player did not bust
+    while ((dealer.Hard_hand() < 17) && (!player.bust()))
+    {//continue to get cards as long as hard count is under 17
+        if (dealer.Soft_hand() <= 21 && dealer.Soft_hand() >= 17)
+            break; //if dealer has a soft count that is >= 17 or <=21, stop getting cards
+        else
+        {
+            dealer.update_hand();
+            emit dealer_hand_changed();
+        }
+    }
 }
 void MainWindow::setEndgame()
 {
-
-    ui->textBrowser->insertPlainText("\nPlayer1: "+ QString::number(player2.value_of_hand()));
+    picture.load(QString::fromStdString(mDealerInitCard)+".png");
+    mDealerCards[0]->setPixmap(picture);
+    ui->hitButton->setEnabled(false);
+    ui->standButton->setEnabled(false);
+    ui->doubleButton->setEnabled(false);
+    //after play has ended output results
     ui->textBrowser->insertPlainText("\nDealer: " + QString::number(dealer.value_of_hand())) ;
 
     int i = 0;
@@ -163,10 +192,8 @@ void MainWindow::setEndgame()
     ui->startButton->setEnabled(true);
     if(handptrs[0]->money() == 0)
         emit finished();
-   // delete verticalPicsLayout->layout();
+    //delete verticalPicsLayout->layout();
     QPixmapCache::clear();
-
-
 }
 void MainWindow::setFinished(){
 

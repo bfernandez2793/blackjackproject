@@ -32,7 +32,7 @@ private slots:
     void setOutput();//output to text(temporary)
     void setStand();//dont not allow player to get more cards
     void setEndgame();//output results reset game
-    void setDealerHand();
+    void setDealerHand();//set the Dealers Hand
     void setDealerStart();
     void setFinished();
 
@@ -40,17 +40,17 @@ private slots:
 
 private:
     RandomPlayer player;
-    RandomPlayer player2;
     Dealer dealer;
     std::vector <Hand*> handptrs;
     QPixmap picture;
     QHBoxLayout *verticalPicsLayout;
     QHBoxLayout *verticalPicsLayout2;
-    QLabel *Dealerinit;
     Ui::MainWindow *ui;
     QTextEdit *text;
-    int i,k;
-    std::string dealerinitcard;
+    int mcards1,mcards2;
+    std::string mDealerInitCard;
+    std::vector<QLabel*> mPlayerCards;
+    std::vector<QLabel*> mDealerCards;
 };
 
 #endif // MAINWINDOW_H
