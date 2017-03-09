@@ -40,6 +40,7 @@ private slots:
 
 private:
     RandomPlayer player;
+    //RandomPlayer player2;
     Dealer dealer;
     std::vector <Hand*> handptrs;
     QPixmap picture;
@@ -49,8 +50,7 @@ private:
     QTextEdit *text;
     int mcards1,mcards2;
     std::string mDealerInitCard;
-    std::vector<QLabel*> mPlayerCards;
-    std::vector<QLabel*> mDealerCards;
+    std::vector<QLabel*> mPlayingCards;
 };
 
 #endif // MAINWINDOW_H

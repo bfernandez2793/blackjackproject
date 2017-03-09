@@ -5,7 +5,7 @@
 
 MainWindow::MainWindow(QWidget *parent):QMainWindow(parent),ui(new Ui::MainWindow),player(100)
 {
-    setFixedSize(400, 400);
+    setFixedSize(1000, 600);
     ui->setupUi(this);
     ui->hitButton->setEnabled(false);//cannot use before a game has begun
     ui->standButton->setEnabled(false);//cannot use before a game has begun
@@ -21,13 +21,10 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent),ui(new Ui::MainWindo
     QObject::connect(this,SIGNAL(endgame()),this,SLOT(setEndgame()));//output the results of the game
     QObject::connect(this,SIGNAL(finished()),this,SLOT(setFinished()));
     handptrs.push_back(&player);
-   // handptrs.push_back(&player2);
+    //handptrs.push_back(&player2);
 
     verticalPicsLayout=new QHBoxLayout(ui->cardLabel);
     verticalPicsLayout2=new QHBoxLayout(ui->cardLabel_2);
-
-    //mcards2 = 0;
-   // mcards1 = 0;
 }
 
 MainWindow::~MainWindow()
@@ -37,14 +34,12 @@ MainWindow::~MainWindow()
 void MainWindow::setGame()
 {
     //reset cards before any new game
-    for(size_t j = 0; j < mDealerCards.size(); ++j)
-        delete mDealerCards[j];
-    mcards1=0;
-    mDealerCards.clear();
-    for(size_t j = 0; j < mPlayerCards.size(); ++j)
-        delete mPlayerCards[j];
+    for(size_t j = 0; j < mPlayingCards.size(); ++j)
+        delete mPlayingCards[j];
     mcards2=0;
-    mPlayerCards.clear();
+    mcards1=0;
+    mPlayingCards.clear();
+
     //initializing the game for one player
     ui->standButton->setEnabled(true);
     ui->hitButton->setEnabled(true);
@@ -52,14 +47,15 @@ void MainWindow::setGame()
     ui->startButton->setEnabled(false);
     ui->textBrowser->setText("");
     player.bet() = QInputDialog::getInt(this, tr("Place your bet"),tr("Bet:"),0,0,player.money(),1);
-    player.update_hand();
-    emit hand_changed();
-    player.update_hand();
-    emit hand_changed();
     dealer.update_hand();
     emit dealer_hand_changed();
     dealer.update_hand();
     emit dealer_hand_changed();
+    player.update_hand();
+    emit hand_changed();
+    player.update_hand();
+    emit hand_changed();
+
     ui->textBrowser->insertPlainText("\nCash: $" + QString::number(player.money()) +"\nPlayer 0:");
     if(player.blackjack()||dealer.blackjack())
         emit endgame();
@@ -85,7 +81,7 @@ void MainWindow::setDealerHand()
         mDealerInitCard = dealer.get_card_name();
 
         QLabel *picLabel = new QLabel(ui->cardLabel_2);
-        mDealerCards.push_back(picLabel);
+        mPlayingCards.push_back(picLabel);
         picLabel->setScaledContents(true);
         picLabel->setPixmap(picture);
         ui->cardLabel_2->resize(mcards1*75,100);
@@ -96,7 +92,7 @@ void MainWindow::setDealerHand()
         picture.load(QString::fromStdString(dealer.get_card_name())+".png");
         ++mcards1;
         QLabel *picLabel = new QLabel(ui->cardLabel_2);
-        mDealerCards.push_back(picLabel);
+        mPlayingCards.push_back(picLabel);
         picLabel->setScaledContents(true);
         picLabel->setPixmap(picture);
         ui->cardLabel_2->resize(mcards1*75,100);
@@ -110,7 +106,7 @@ void MainWindow::setOutput()
     picture.load(QString::fromStdString(player.get_card_name())+".png");
     ++mcards2;
     QLabel *picLabel = new QLabel(ui->cardLabel);
-    mPlayerCards.push_back(picLabel);
+    mPlayingCards.push_back(picLabel);
     picLabel->setScaledContents(true);
     picLabel->setPixmap(picture);
     ui->cardLabel->resize(mcards2*75,100);
@@ -152,7 +148,7 @@ void MainWindow::setDealerStart()
 void MainWindow::setEndgame()
 {
     picture.load(QString::fromStdString(mDealerInitCard)+".png");
-    mDealerCards[0]->setPixmap(picture);
+    mPlayingCards[0]->setPixmap(picture);
     ui->hitButton->setEnabled(false);
     ui->standButton->setEnabled(false);
     ui->doubleButton->setEnabled(false);

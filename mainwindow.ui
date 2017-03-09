@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>452</width>
-    <height>492</height>
+    <width>1000</width>
+    <height>491</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,9 +17,9 @@
    <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>210</y>
-      <width>391</width>
+      <x>290</x>
+      <y>300</y>
+      <width>400</width>
       <height>131</height>
      </rect>
     </property>
@@ -64,8 +64,8 @@
    <widget class="QLabel" name="cardLabel">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>110</y>
+      <x>390</x>
+      <y>200</y>
       <width>100</width>
       <height>80</height>
      </rect>
@@ -80,8 +80,8 @@
    <widget class="QLabel" name="cardLabel_2">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>10</y>
+      <x>390</x>
+      <y>40</y>
       <width>100</width>
       <height>80</height>
      </rect>
@@ -93,17 +93,13 @@
      <string/>
     </property>
    </widget>
-   <zorder>layoutWidget</zorder>
-   <zorder>cardLabel</zorder>
-   <zorder>textBrowser</zorder>
-   <zorder>cardLabel_2</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>452</width>
+     <width>1000</width>
      <height>21</height>
     </rect>
    </property>
