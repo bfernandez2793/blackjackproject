@@ -37,7 +37,6 @@ void MainWindow::Reset_Game(std::list<QLabel*>::iterator begin, std::list<QLabel
         delete *iter;
     }
 }
-
 void MainWindow::setGame()
 {
     Reset_Game(mPlayingCards.begin(),mPlayingCards.end());

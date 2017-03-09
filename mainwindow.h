@@ -17,6 +17,7 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
+    void Reset_Game(std::list<QLabel*>::iterator begin, std::list<QLabel*>::iterator end);
     ~MainWindow();
 signals:
     void hand_changed();//signal when hand has changed
@@ -50,7 +51,7 @@ private:
     QTextEdit *text;
     int mcards1,mcards2;
     std::string mDealerInitCard;
-    std::vector<QLabel*> mPlayingCards;
+    std::list<QLabel*> mPlayingCards;
 };
 
 #endif // MAINWINDOW_H
