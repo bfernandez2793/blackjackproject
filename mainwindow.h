@@ -17,7 +17,8 @@ class MainWindow : public QMainWindow
 
 public:
     explicit MainWindow(QWidget *parent = 0);
-    void Reset_Game(std::list<QLabel*>::iterator begin, std::list<QLabel*>::iterator end);
+    void Reset_Game(std::list<QLabel*>::iterator, std::list<QLabel*>::iterator);
+    void BlackJack(std::list<Hand*>::iterator, std::list<Hand*>::iterator);
     ~MainWindow();
 signals:
     void hand_changed();//signal when hand has changed
@@ -43,7 +44,7 @@ private:
     RandomPlayer player;
     //RandomPlayer player2;
     Dealer dealer;
-    std::vector <Hand*> handptrs;
+    std::list<Hand*> handptrs;
     QPixmap picture;
     QHBoxLayout *verticalPicsLayout;
     QHBoxLayout *verticalPicsLayout2;

@@ -22,22 +22,30 @@ MainWindow::MainWindow(QWidget *parent):QMainWindow(parent),ui(new Ui::MainWindo
     QObject::connect(this,SIGNAL(finished()),this,SLOT(setFinished()));
     handptrs.push_back(&player);
     //handptrs.push_back(&player2);
-
+    handptrs.push_back(&dealer);
     verticalPicsLayout=new QHBoxLayout(ui->cardLabel);
     verticalPicsLayout2=new QHBoxLayout(ui->cardLabel_2);
 }
-
 MainWindow::~MainWindow()
 {
     delete ui;
 }
-void MainWindow::Reset_Game(std::list<QLabel*>::iterator begin, std::list<QLabel*>::iterator end){
+void MainWindow::Reset_Game(std::list<QLabel*>::iterator begin, std::list<QLabel*>::iterator end)
+{
     for(auto iter = begin; iter != end; ++iter)
     {
         delete *iter;
     }
 }
+void MainWindow::BlackJack(std::list<Hand*>::iterator begin, std::list<Hand*>::iterator end)
+{
+    for(auto iter = begin; iter != end; ++iter)
+    {
+        if((*iter)->blackjack())
+            emit endgame();
+    }
 
+}
 void MainWindow::setGame()
 {
     Reset_Game(mPlayingCards.begin(),mPlayingCards.end());
@@ -51,7 +59,7 @@ void MainWindow::setGame()
     ui->doubleButton->setEnabled(true);
     ui->startButton->setEnabled(false);
     ui->textBrowser->setText("");
-    player.bet() = QInputDialog::getInt(this, tr("Place your bet"),tr("Bet:"),0,0,player.money(),1);
+    player.bet() = QInputDialog::getInt(this, tr("Place your bet"),tr("Bet:"),20,20,player.money(),1);
     dealer.update_hand();
     emit dealer_hand_changed();
     dealer.update_hand();
@@ -61,9 +69,8 @@ void MainWindow::setGame()
     player.update_hand();
     emit hand_changed();
 
-    ui->textBrowser->insertPlainText("\nCash: $" + QString::number(player.money()) +"\nPlayer 0:");
-    if(player.blackjack()||dealer.blackjack())
-        emit endgame();
+    ui->CashLabel->setText("$ "+QString::number(player.money()));
+    BlackJack(handptrs.begin(),handptrs.end());
 }
 void MainWindow::setHand()
 {
@@ -153,7 +160,6 @@ void MainWindow::setDealerStart()
 void MainWindow::setEndgame()
 {
     picture.load(QString::fromStdString(mDealerInitCard)+".png");
-    //mPlayingCards[0]->setPixmap(picture);
     mPlayingCards.front()->setPixmap(picture);
     ui->hitButton->setEnabled(false);
     ui->standButton->setEnabled(false);
@@ -191,8 +197,9 @@ void MainWindow::setEndgame()
     }
     dealer.reset();
     ui->startButton->setText("Restart");
+    ui->CashLabel->setText("$ "+QString::number(player.money()));
     ui->startButton->setEnabled(true);
-    if(handptrs[0]->money() == 0)
+    if(handptrs.front()->money() == 0)
         emit finished();
     //delete verticalPicsLayout->layout();
     QPixmapCache::clear();
